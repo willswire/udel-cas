@@ -15,7 +15,7 @@ var serviceURLQueryString = querystring.stringify({
 });
 
 function verifyTicket(ticket) {
-    var token;
+    var token = {};
 
     https.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket, (resp) => {
         let data = '';
@@ -38,11 +38,15 @@ function verifyTicket(ticket) {
         console.log("Error: " + err.message);
     });
 
-    if (token.has("cas:authenticationSuccess")) {
-        return token["cas:serviceResponse"]["$"]["xmlns:cas"]["cas:authenticationSuccess"];
-    } else return [{
-        "message": "invalid ticket"
-    }]
+    if (token.hasOwnProperty("cas:authenticationSuccess")) {
+        token = token["cas:serviceResponse"]["$"]["xmlns:cas"]["cas:authenticationSuccess"];
+    } else {
+        token = {
+            "message": "invalid ticket"
+        };
+    }
+
+    return token;
 }
 
 app.get('/', function (req, res) {
