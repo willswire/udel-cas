@@ -1,6 +1,6 @@
-const xml2js = require('xml2js');
 const querystring = require('querystring');
 const express = require('express');
+const convert = require('xml-js');
 const axios = require('axios');
 const https = require('https');
 const fs = require('fs');
@@ -41,7 +41,10 @@ async function verifyTicket(ticket) {
 app.get('/', async (req, res, next) => {
     try {
         const data = await verifyTicket(req.query.ticket);
-        const jsonData = await convertToken(data);
+        const jsonData = convert.xml2json(data, {
+            compact: true,
+            spaces: 4
+        });
         res.json(jsonData);
     } catch (error) {
         console.error(error);
