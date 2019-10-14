@@ -41,7 +41,7 @@ async function verifyTicket(ticket) {
 app.get('/', async (req, res, next) => {
     try {
         const data = await verifyTicket(req.query.ticket);
-        const jsonData = await convertToken(jsonData);
+        const jsonData = await convertToken(data);
         res.json(jsonData);
     } catch (error) {
         console.error(error);
