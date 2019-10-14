@@ -30,10 +30,6 @@ async function verifyTicket(ticket) {
         console.error(error);
     }
 
-    if (token.hasOwnProperty("cas:authenticationSuccess")) {
-        token = token["cas:serviceResponse"]["cas:authenticationSuccess"];
-    }
-
     return token;
 }
 
