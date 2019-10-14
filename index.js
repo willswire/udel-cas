@@ -22,16 +22,16 @@ async function verifyTicket(ticket) {
 
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
-        xml2js.parseStringPromise(response.data).then(function (result) {
+        await xml2js.parseStringPromise(response.data).then(function (result) {
             token = JSON.stringify(result);
-            console.log(result);
+            console.log(token);
         });
     } catch (error) {
         console.error(error);
     }
 
     if (token.hasOwnProperty("cas:authenticationSuccess")) {
-        token = token["cas:serviceResponse"]["$"]["xmlns:cas"]["cas:authenticationSuccess"];
+        token = token["cas:serviceResponse"]["cas:authenticationSuccess"];
     }
 
     return token;
