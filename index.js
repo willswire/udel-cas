@@ -15,9 +15,10 @@ var serviceURLQueryString = querystring.stringify({
 });
 
 function verifyTicket(ticket) {
+    var token;
+
     https.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket, (resp) => {
         let data = '';
-        let token;
 
         // A chunk of data has been recieved.
         resp.on('data', (chunk) => {
