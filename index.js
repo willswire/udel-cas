@@ -13,6 +13,12 @@ var serviceQueryString = querystring.stringify({
 });
 
 app.get('/', function (req, res) {
+    res.json({
+        "message": "endpoint reached"
+    })
+})
+
+app.get('/validate', function (req, res) {
     res.redirect(302, casServer + casLogin + serviceQueryString);
 });
 
