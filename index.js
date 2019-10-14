@@ -16,12 +16,14 @@ var serviceURLQueryString = querystring.stringify({
 });
 
 async function verifyTicket(ticket) {
-    var token = {};
+    var token = {
+        "message": "invalid ticket"
+    };
 
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
-        console.log(response);
-        parseString(response, function (err, result) {
+        console.log(response.data);
+        parseString(response.data, function (err, result) {
             token = JSON.stringify(result);
         });
     } catch (error) {
@@ -30,10 +32,6 @@ async function verifyTicket(ticket) {
 
     if (token.hasOwnProperty("cas:authenticationSuccess")) {
         token = token["cas:serviceResponse"]["$"]["xmlns:cas"]["cas:authenticationSuccess"];
-    } else {
-        token = {
-            "message": "invalid ticket"
-        };
     }
 
     return token;
