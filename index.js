@@ -31,11 +31,11 @@ async function convertToken(token) {
 }
 
 async function verifyTicket(ticket) {
-    var returnedToken;
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
-        const token = await convertToken(response.data);
-        return token;
+        //const token = await convertToken(response.data);
+        //return token;
+        return response.data;
     } catch (error) {
         console.error(error);
     }
@@ -44,7 +44,7 @@ async function verifyTicket(ticket) {
 app.get('/', async (req, res, next) => {
     try {
         const data = await verifyTicket(req.query.ticket);
-        res.json(data);
+        res.send(data);
     } catch (error) {
         console.error(error);
     }
