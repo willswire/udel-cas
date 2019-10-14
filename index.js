@@ -33,9 +33,12 @@ function verifyTicket(ticket) {
 }
 
 app.get('/', function (req, res) {
-    var ticket = req.query.ticket.toString();
-    if (ticket.includes("ST")) {
-        verifyTicket(ticket);
+    var ticket;
+    if (req.query.ticket !== {}) {
+        ticket = req.query.ticket.toString();
+        if (ticket.includes("ST")) {
+            verifyTicket(ticket);
+        }
     } else {
         res.json({
             "message": "not logged in"
