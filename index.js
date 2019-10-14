@@ -21,11 +21,11 @@ async function verifyTicket(ticket) {
         xml2js.parseStringPromise(response.data).then(function (result) {
             var token = JSON.stringify(result);
             console.log(token);
-            return token;
         });
     } catch (error) {
         console.error(error);
     }
+    return token;
 }
 
 app.get('/', async (req, res, next) => {
