@@ -19,10 +19,9 @@ async function convertToken(token) {
     var newToken = {
         "status": "unauthenticated"
     };
-    await xml2js.parseStringPromise(token).then(function (result) {
+    xml2js.parseStringPromise(token).then(function (result) {
             newToken = JSON.stringify(result);
             console.dir(newToken);
-            console.log('Done');
             return newToken;
         })
         .catch(function (error) {
@@ -33,8 +32,6 @@ async function convertToken(token) {
 async function verifyTicket(ticket) {
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
-        //const token = await convertToken(response.data);
-        //return token;
         return response.data;
     } catch (error) {
         console.error(error);
@@ -44,8 +41,8 @@ async function verifyTicket(ticket) {
 app.get('/', async (req, res, next) => {
     try {
         const data = await verifyTicket(req.query.ticket);
-        res.type('application/xml');
-        res.send(data);
+        const jsonData = await convertToken(jsonData);
+        res.json(jsonData);
     } catch (error) {
         console.error(error);
     }
