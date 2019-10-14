@@ -24,7 +24,7 @@ async function verifyTicket(ticket) {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
         xml2js.parseStringPromise(response.data).then(function (result) {
             token = JSON.stringify(result);
-            console.log(response);
+            console.log(result);
         });
     } catch (error) {
         console.error(error);
