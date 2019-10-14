@@ -38,7 +38,7 @@ app.get('/', async (req, res) => {
     }
 })
 
-app.get('/login', function (res) {
+app.get('/login', function (req, res) {
     res.redirect(302, casServer + casLogin + serviceURLQueryString);
 });
 
