@@ -21,10 +21,9 @@ var serviceURLQueryString = querystring.stringify({
     service: serviceURL
 });
 
-async function verifyTicket(ticket, req) {
+async function verifyTicket(ticket) {
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
-        req.session.token = response.data;
         return response.data;
     } catch (error) {
         console.error(error);
@@ -33,7 +32,7 @@ async function verifyTicket(ticket, req) {
 
 app.get('/', async (req, res) => {
     try {
-        const data = await verifyTicket(req.query.ticket, req);
+        const data = await verifyTicket(req.query.ticket);
         const jsonData = convert.xml2json(data, {
             compact: true,
             trim: true
@@ -48,6 +47,16 @@ app.get('/', async (req, res) => {
 app.get('/login', function (req, res) {
     res.redirect(302, casServer + casLogin + serviceURLQueryString);
 });
+
+app.use(function (req, res, next) {
+    const data = await verifyTicket(req.query.ticket);
+    const jsonData = convert.xml2json(data, {
+        compact: true,
+        trim: true
+    });
+    req.session.token = jsonData;
+    res.end(n + ' views')
+})
 
 https.createServer({
         key: fs.readFileSync('/var/secret/etc/ssl/forms-combined.cis.udel.edu.key'),
