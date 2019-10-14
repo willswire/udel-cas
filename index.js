@@ -27,7 +27,7 @@ function verifyTicket(ticket) {
         resp.on('end', () => {
             //console.log(JSON.parse(data).explanation);
             parseString(data, function (err, result) {
-                console.log(util.inspect(result, false, null));
+                console.log(JSON.stringify(result));
             });
         });
 
