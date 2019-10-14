@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 const querystring = require('querystring');
-var https = require('https');
-var fs = require('fs');
+const https = require('https');
+const fs = require('fs');
+const parseString = require('xml2js').parseString;
 
 var casLogin = '/cas/login?'
 var casVerify = '/cas/serviceValidate?'
@@ -24,7 +25,10 @@ function verifyTicket(ticket) {
 
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
-            console.log(JSON.parse(data).explanation);
+            //console.log(JSON.parse(data).explanation);
+            parseString(data, function (err, result) {
+                console.dir(result);
+            });
         });
 
     }).on("error", (err) => {
