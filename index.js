@@ -17,6 +17,7 @@ var serviceURLQueryString = querystring.stringify({
 function verifyTicket(ticket) {
     https.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket, (resp) => {
         let data = '';
+        let token;
 
         // A chunk of data has been recieved.
         resp.on('data', (chunk) => {
@@ -27,24 +28,25 @@ function verifyTicket(ticket) {
         resp.on('end', () => {
             //console.log(JSON.parse(data).explanation);
             parseString(data, function (err, result) {
-                console.log(JSON.stringify(result));
+                token = JSON.stringify(result);
+                console.log(token);
             });
         });
 
     }).on("error", (err) => {
         console.log("Error: " + err.message);
     });
+
+    if (token.has("cas:authenticationSuccess")) {
+        return token["cas:serviceResponse"]["$"]["xmlns:cas"]["cas:authenticationSuccess"];
+    } else return [{
+        "message": "invalid ticket"
+    }]
 }
 
 app.get('/', function (req, res) {
-    if (req.query.ticket !== {}) {
-        ticket = req.query.ticket;
-        verifyTicket(ticket);
-    } else {
-        res.json({
-            "message": "not logged in"
-        });
-    }
+    ticket = req.query.ticket;
+    res.json(verifyTicket(ticket));
 })
 
 app.get('/validate', function (req, res) {
