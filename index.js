@@ -14,29 +14,18 @@ var serviceURLQueryString = querystring.stringify({
     service: serviceURL
 });
 
-function verifyTicket(ticket) {
+async function verifyTicket(ticket) {
     var token = {};
 
-    https.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket, (resp) => {
-        let data = '';
-
-        // A chunk of data has been recieved.
-        resp.on('data', (chunk) => {
-            data += chunk;
+    try {
+        const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
+        console.log(response);
+        parseString(response, function (err, result) {
+            token = JSON.stringify(result);
         });
-
-        // The whole response has been received. Print out the result.
-        resp.on('end', () => {
-            //console.log(JSON.parse(data).explanation);
-            parseString(data, function (err, result) {
-                token = JSON.stringify(result);
-                console.log(token);
-            });
-        });
-
-    }).on("error", (err) => {
-        console.log("Error: " + err.message);
-    });
+    } catch (error) {
+        console.error(error);
+    }
 
     if (token.hasOwnProperty("cas:authenticationSuccess")) {
         token = token["cas:serviceResponse"]["$"]["xmlns:cas"]["cas:authenticationSuccess"];
