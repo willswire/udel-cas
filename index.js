@@ -31,7 +31,8 @@ app.get('/', async (req, res, next) => {
             compact: true,
             trim: true
         });
-        res.json(jsonData);
+        res.type('application/json');
+        res.send(jsonData);
     } catch (error) {
         console.error(error);
     }
