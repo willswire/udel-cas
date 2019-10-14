@@ -22,9 +22,9 @@ async function verifyTicket(ticket) {
 
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
-        console.log(response.data);
         xml2js.parseStringPromise(response.data).then(function (result) {
-            token = JSON.stringify(result)
+            token = JSON.stringify(result);
+            console.log(response);
         });
     } catch (error) {
         console.error(error);
@@ -39,7 +39,7 @@ async function verifyTicket(ticket) {
 
 app.get('/', function (req, res) {
     ticket = req.query.ticket;
-    res.json(verifyTicket(ticket));
+    res.json(await verifyTicket(ticket));
 })
 
 app.get('/validate', function (req, res) {
