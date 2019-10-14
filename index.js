@@ -48,14 +48,17 @@ app.get('/login', function (req, res) {
     res.redirect(302, casServer + casLogin + serviceURLQueryString);
 });
 
-app.use(function (req, res, next) {
-    const data = await verifyTicket(req.query.ticket);
-    const jsonData = convert.xml2json(data, {
-        compact: true,
-        trim: true
-    });
-    req.session.token = jsonData;
-    res.end(n + ' views')
+app.use(async (req, res, next) => {
+    try {
+        const data = await verifyTicket(req.query.ticket);
+        const jsonData = convert.xml2json(data, {
+            compact: true,
+            trim: true
+        });
+        req.session.token = jsonData;
+    } catch (error) {
+        console.error(error);
+    }
 })
 
 https.createServer({
