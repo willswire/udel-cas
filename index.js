@@ -16,26 +16,26 @@ var serviceURLQueryString = querystring.stringify({
 });
 
 async function verifyTicket(ticket) {
-    var token = {
-        "message": "invalid ticket"
-    };
-
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
         await xml2js.parseStringPromise(response.data).then(function (result) {
-            token = JSON.stringify(result);
+            var token = JSON.stringify(result);
             console.log(token);
+            return token;
         });
     } catch (error) {
         console.error(error);
     }
-
-    return token;
 }
 
-app.get('/', function (req, res) {
+app.get('/', async (req, res, next) => {
     ticket = req.query.ticket;
-    res.json(verifyTicket(ticket));
+    try {
+        const data = await verifyTicket(ticket);
+        res.json(data);
+    } catch (error) {
+        console.error(error);
+    }
 })
 
 app.get('/validate', function (req, res) {
