@@ -24,7 +24,7 @@ async function verifyTicket(ticket) {
     }
 }
 
-app.get('/', async (req, res, next) => {
+app.get('/', async (req, res) => {
     try {
         const data = await verifyTicket(req.query.ticket);
         const jsonData = convert.xml2json(data, {
@@ -38,7 +38,7 @@ app.get('/', async (req, res, next) => {
     }
 })
 
-app.get('/validate', function (req, res) {
+app.get('/login', function (res) {
     res.redirect(302, casServer + casLogin + serviceURLQueryString);
 });
 
@@ -47,5 +47,5 @@ https.createServer({
         cert: fs.readFileSync('/var/secret/etc/ssl/forms-combined.cis.udel.edu.pem')
     }, app)
     .listen(3000, function () {
-        console.log('App listening on port 3000! Go to: ' + serviceURL)
+        console.log('API listening at: ' + serviceURL)
     });
