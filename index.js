@@ -15,20 +15,6 @@ var serviceURLQueryString = querystring.stringify({
     service: serviceURL
 });
 
-async function convertToken(token) {
-    var newToken = {
-        "status": "unauthenticated"
-    };
-    xml2js.parseStringPromise(token).then(function (result) {
-            newToken = JSON.stringify(result);
-            console.dir(newToken);
-            return newToken;
-        })
-        .catch(function (error) {
-            console.error(error);
-        });
-}
-
 async function verifyTicket(ticket) {
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
@@ -43,7 +29,7 @@ app.get('/', async (req, res, next) => {
         const data = await verifyTicket(req.query.ticket);
         const jsonData = convert.xml2json(data, {
             compact: true,
-            spaces: 4
+            trim: true
         });
         res.json(jsonData);
     } catch (error) {
