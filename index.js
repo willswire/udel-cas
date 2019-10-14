@@ -1,4 +1,4 @@
-const parseString = require('xml2js').parseString;
+const xml2js = require('xml2js');
 const querystring = require('querystring');
 const express = require('express');
 const axios = require('axios');
@@ -23,8 +23,8 @@ async function verifyTicket(ticket) {
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
         console.log(response.data);
-        parseString(response.data, function (err, result) {
-            token = JSON.stringify(result);
+        xml2js.parseStringPromise(response.data).then(function (result) {
+            token = JSON.stringify(result)
         });
     } catch (error) {
         console.error(error);
