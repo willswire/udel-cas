@@ -19,16 +19,15 @@ async function convertToken(token) {
     var newToken = {
         "status": "unauthenticated"
     };
-    xml2js.parseStringPromise(token).then(function (result) {
-            JSON.stringify(result);
-            newToken = result;
-            console.dir(result);
+    await xml2js.parseStringPromise(token).then(function (result) {
+            newToken = JSON.stringify(result);
+            console.dir(newToken);
             console.log('Done');
+            return newToken;
         })
         .catch(function (error) {
             console.error(error);
         });
-    return newToken;
 }
 
 async function verifyTicket(ticket) {
@@ -36,11 +35,10 @@ async function verifyTicket(ticket) {
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
         const token = await convertToken(response.data);
-        returnedToken = token;
+        return token;
     } catch (error) {
         console.error(error);
     }
-    return returnedToken;
 }
 
 app.get('/', async (req, res, next) => {
