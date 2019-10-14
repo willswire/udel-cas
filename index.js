@@ -1,4 +1,5 @@
 const querystring = require('querystring');
+const session = require('express-session');
 const express = require('express');
 const convert = require('xml-js');
 const axios = require('axios');
@@ -10,6 +11,15 @@ var casLogin = '/cas/login?'
 var casVerify = '/cas/serviceValidate?'
 var casServer = 'https://cas.nss.udel.edu'
 var serviceURL = 'https://planner.cis.udel.edu:3000/'
+
+app.use(session({
+    secret: 'planner',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: true
+    }
+}))
 
 var serviceURLQueryString = querystring.stringify({
     service: serviceURL
@@ -33,6 +43,10 @@ app.get('/', async (req, res) => {
         });
         res.type('application/json');
         res.send(jsonData);
+        res.cookie('CASToken', jsonData, {
+            maxAge: 900000,
+            httpOnly: true
+        });
     } catch (error) {
         console.error(error);
     }
