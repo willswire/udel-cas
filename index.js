@@ -1,5 +1,5 @@
+const cookieSession = require('cookie-session');
 const querystring = require('querystring');
-const session = require('express-session');
 const express = require('express');
 const convert = require('xml-js');
 const axios = require('axios');
@@ -7,27 +7,24 @@ const https = require('https');
 const fs = require('fs');
 const app = express();
 
-var casLogin = '/cas/login?'
-var casVerify = '/cas/serviceValidate?'
-var casServer = 'https://cas.nss.udel.edu'
-var serviceURL = 'https://planner.cis.udel.edu:3000/'
+var casLogin = '/cas/login?';
+var casVerify = '/cas/serviceValidate?';
+var casServer = 'https://cas.nss.udel.edu';
+var serviceURL = 'https://planner.cis.udel.edu:3000/';
 
-app.use(session({
-    secret: 'planner',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: true
-    }
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2']
 }))
 
 var serviceURLQueryString = querystring.stringify({
     service: serviceURL
 });
 
-async function verifyTicket(ticket) {
+async function verifyTicket(ticket, req) {
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
+        req.session.token = response.data;
         return response.data;
     } catch (error) {
         console.error(error);
@@ -36,17 +33,13 @@ async function verifyTicket(ticket) {
 
 app.get('/', async (req, res) => {
     try {
-        const data = await verifyTicket(req.query.ticket);
+        const data = await verifyTicket(req.query.ticket, req);
         const jsonData = convert.xml2json(data, {
             compact: true,
             trim: true
         });
         res.type('application/json');
         res.send(jsonData);
-        res.cookie('CASToken', jsonData, {
-            maxAge: 900000,
-            httpOnly: true
-        });
     } catch (error) {
         console.error(error);
     }
@@ -61,5 +54,5 @@ https.createServer({
         cert: fs.readFileSync('/var/secret/etc/ssl/forms-combined.cis.udel.edu.pem')
     }, app)
     .listen(3000, function () {
-        console.log('API listening at: ' + serviceURL)
+        console.log('API listening at: ' + serviceURL);
     });
