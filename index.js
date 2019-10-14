@@ -44,6 +44,7 @@ async function verifyTicket(ticket) {
 app.get('/', async (req, res, next) => {
     try {
         const data = await verifyTicket(req.query.ticket);
+        res.type('application/xml');
         res.send(data);
     } catch (error) {
         console.error(error);
