@@ -33,10 +33,10 @@ function verifyTicket(ticket) {
 }
 
 app.get('/', function (req, res) {
-    var ticket;
+    var ticket = "ticket";
     if (req.query.ticket !== {}) {
-        ticket = req.query.ticket.toString();
-        if (ticket.includes("ST")) {
+        ticket = req.query.ticket;
+        if (ticket.toString.includes("ST")) {
             verifyTicket(ticket);
         }
     } else {
