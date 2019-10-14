@@ -16,10 +16,13 @@ var serviceURLQueryString = querystring.stringify({
 });
 
 async function verifyTicket(ticket) {
+    var token = {
+        "status": "unauthenticated"
+    }
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
         xml2js.parseStringPromise(response.data).then(function (result) {
-            var token = JSON.stringify(result);
+            token = JSON.stringify(result);
             console.log(token);
         });
     } catch (error) {
