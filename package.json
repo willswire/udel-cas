@@ -1,0 +1,15 @@
+{
+  "name": "udel-cas",
+  "version": "1.0.0",
+  "description": "udel cas integration for express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
