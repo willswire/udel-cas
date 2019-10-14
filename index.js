@@ -18,7 +18,7 @@ var serviceURLQueryString = querystring.stringify({
 async function verifyTicket(ticket) {
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
-        await xml2js.parseStringPromise(response.data).then(function (result) {
+        xml2js.parseStringPromise(response.data).then(function (result) {
             var token = JSON.stringify(result);
             console.log(token);
             return token;
