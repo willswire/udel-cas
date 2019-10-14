@@ -39,7 +39,7 @@ async function verifyTicket(ticket) {
 
 app.get('/', function (req, res) {
     ticket = req.query.ticket;
-    res.json(await verifyTicket(ticket));
+    res.json(verifyTicket(ticket));
 })
 
 app.get('/validate', function (req, res) {
