@@ -5,21 +5,46 @@ var https = require('https');
 var fs = require('fs');
 
 var casLogin = '/cas/login?'
+var casVerify = '/cas/serviceValidate?'
 var casServer = 'https://cas.nss.udel.edu'
 var serviceURL = 'https://planner.cis.udel.edu:3000/'
 
-var serviceQueryString = querystring.stringify({
+var serviceURLQueryString = querystring.stringify({
     service: serviceURL
 });
 
+function verifyTicket(ticket) {
+    https.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket, (resp) => {
+        let data = '';
+
+        // A chunk of data has been recieved.
+        resp.on('data', (chunk) => {
+            data += chunk;
+        });
+
+        // The whole response has been received. Print out the result.
+        resp.on('end', () => {
+            console.log(JSON.parse(data).explanation);
+        });
+
+    }).on("error", (err) => {
+        console.log("Error: " + err.message);
+    });
+}
+
 app.get('/', function (req, res) {
-    res.json({
-        "message": "endpoint reached"
-    })
+    var ticket = req.query.ticket.toString();
+    if (ticket.includes("ST")) {
+        verifyTicket(ticket);
+    } else {
+        res.json({
+            "message": "not logged in"
+        });
+    }
 })
 
 app.get('/validate', function (req, res) {
-    res.redirect(302, casServer + casLogin + serviceQueryString);
+    res.redirect(302, casServer + casLogin + serviceURLQueryString);
 });
 
 https.createServer({
