@@ -45,8 +45,8 @@ app.get('/', async (req, res) => {
         res.redirect(302, '/login');
     } else {
         try {
-            const data = await verifyTicket(req.query.ticket);
-            const jsonData = convert.xml2json(data, {
+            var data = await verifyTicket(req.query.ticket);
+            var jsonData = convert.xml2json(data, {
                 compact: true,
                 trim: true
             });
@@ -60,7 +60,7 @@ app.get('/', async (req, res) => {
                     path: '/'
                 }
             );
-            res.redirect(302, serviceURL);
+            //res.redirect(302, serviceURL);
         } catch (error) {
             console.error(error);
         }
