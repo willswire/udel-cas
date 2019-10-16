@@ -49,8 +49,17 @@ app.get('/', async (req, res) => {
                 compact: true,
                 trim: true
             });
-            res.type('application/json');
-            res.send(jsonData);
+            jsonData.stringify();
+            //res.type('application/json');
+            //res.send(jsonData);
+            res.cookie(
+                'cas_user',
+                jsonData, {
+                    expires: new Date(Date.now() + 2 * 604800000),
+                    path: '/'
+                }
+            );
+            res.send('<h1>You are logged in, and the cookie has been set!</h1>');
         } catch (error) {
             console.error(error);
         }
