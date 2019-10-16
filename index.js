@@ -51,7 +51,7 @@ app.get('/', async (req, res) => {
                 trim: true
             });
             var casCookie = JSON.stringify(jsonData);
-            res.type('application/json');
+            //res.type('application/json');
             //res.send(jsonData);
             res.cookie(
                 'casCookie',
