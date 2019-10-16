@@ -54,7 +54,7 @@ app.get('/', async (req, res) => {
             //res.type('application/json');
             //res.send(jsonData);
             res.cookie(
-                'casCookie',
+                'cas_user',
                 casCookie, {
                     expires: new Date(Date.now() + 2 * 604800000),
                     path: '/'
