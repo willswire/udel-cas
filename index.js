@@ -31,6 +31,7 @@ async function verifyTicket(ticket) {
 }
 
 app.get('/', async (req, res) => {
+    console.log(req.query);
     try {
         const data = await verifyTicket(req.query.ticket);
         const jsonData = convert.xml2json(data, {
@@ -47,19 +48,6 @@ app.get('/', async (req, res) => {
 app.get('/login', function (req, res) {
     res.redirect(302, casServer + casLogin + serviceURLQueryString);
 });
-
-app.use(async (req, res, next) => {
-    try {
-        const data = await verifyTicket(req.query.ticket);
-        const jsonData = convert.xml2json(data, {
-            compact: true,
-            trim: true
-        });
-        req.session.token = jsonData;
-    } catch (error) {
-        console.error(error);
-    }
-})
 
 https.createServer({
         key: fs.readFileSync('/var/secret/etc/ssl/forms-combined.cis.udel.edu.key'),
