@@ -76,5 +76,5 @@ https.createServer({
         cert: fs.readFileSync('/var/secret/etc/ssl/forms-combined.cis.udel.edu.pem')
     }, app)
     .listen(PORT, function () {
-        console.log('API listening at: ' + serviceURL + ':' + PORT);
+        console.log('API listening at: ' + serviceURL);
     });
