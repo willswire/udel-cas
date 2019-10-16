@@ -2,6 +2,7 @@ const cookieSession = require('cookie-session');
 const querystring = require('querystring');
 const express = require('express');
 const convert = require('xml-js');
+var jwt = require('jsonwebtoken');
 const axios = require('axios');
 const https = require('https');
 const fs = require('fs');
@@ -50,7 +51,8 @@ app.get('/', async (req, res) => {
                 compact: true,
                 trim: true
             });
-            var casCookie = JSON.stringify(jsonData);
+            var casCookie = jwt.sign(jsonData, 'planner');
+            //var casCookie = JSON.stringify(jsonData);
             //res.type('application/json');
             //res.send(jsonData);
             res.cookie(
