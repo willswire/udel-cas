@@ -46,16 +46,16 @@ app.get('/', async (req, res) => {
     } else {
         try {
             var data = await verifyTicket(req.query.ticket);
-            var jsonData = convert.xml2json(data, {
-                compact: true,
-                trim: true
-            });
-            var casCookie = JSON.stringify(jsonData);
+            //var jsonData = convert.xml2json(data, {
+            //compact: true,
+            //    trim: true
+            //});
+            //var casCookie = JSON.stringify(jsonData);
             //res.type('application/json');
             //res.send(jsonData);
             res.cookie(
                 'cas_user',
-                casCookie, {
+                data, {
                     expires: new Date(Date.now() + 2 * 604800000),
                     path: '/'
                 }
