@@ -10,7 +10,9 @@ const app = express();
 var casLogin = '/cas/login?';
 var casVerify = '/cas/serviceValidate?';
 var casServer = 'https://cas.nss.udel.edu';
-var serviceURL = 'https://planner.cis.udel.edu:3000/';
+var serviceURL = 'https://planner.cis.udel.edu';
+
+const PORT = 3000;
 
 app.use(cookieSession({
     name: 'cas-session',
@@ -58,7 +60,7 @@ app.get('/', async (req, res) => {
                     path: '/'
                 }
             );
-            res.send('<h1>You are logged in, and the cookie has been set!</h1>');
+            res.redirect(302, serviceURL);
         } catch (error) {
             console.error(error);
         }
@@ -73,6 +75,6 @@ https.createServer({
         key: fs.readFileSync('/var/secret/etc/ssl/forms-combined.cis.udel.edu.key'),
         cert: fs.readFileSync('/var/secret/etc/ssl/forms-combined.cis.udel.edu.pem')
     }, app)
-    .listen(3000, function () {
-        console.log('API listening at: ' + serviceURL);
+    .listen(PORT, function () {
+        console.log('API listening at: ' + serviceURL + ':' + PORT);
     });
