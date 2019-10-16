@@ -13,7 +13,7 @@ var casServer = 'https://cas.nss.udel.edu';
 var serviceURL = 'https://planner.cis.udel.edu:3000/';
 
 app.use(cookieSession({
-    name: 'session',
+    name: 'cas-session',
     keys: ['key1', 'key2']
 }))
 
@@ -39,7 +39,6 @@ async function verifyTicket(ticket) {
 }
 
 app.get('/', async (req, res) => {
-    console.log(req.query);
     if (isEmpty(req.query)) {
         res.redirect(302, '/login');
     } else {
