@@ -21,6 +21,14 @@ var serviceURLQueryString = querystring.stringify({
     service: serviceURL
 });
 
+function isEmpty(obj) {
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
 async function verifyTicket(ticket) {
     try {
         const response = await axios.get(casServer + casVerify + serviceURLQueryString + '&ticket=' + ticket);
@@ -32,7 +40,7 @@ async function verifyTicket(ticket) {
 
 app.get('/', async (req, res) => {
     console.log(req.query);
-    if (req.query === undefined) {
+    if (isEmpty(req.query)) {
         res.redirect(302, '/login');
     } else {
         try {
