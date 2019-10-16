@@ -32,16 +32,20 @@ async function verifyTicket(ticket) {
 
 app.get('/', async (req, res) => {
     console.log(req.query);
-    try {
-        const data = await verifyTicket(req.query.ticket);
-        const jsonData = convert.xml2json(data, {
-            compact: true,
-            trim: true
-        });
-        res.type('application/json');
-        res.send(jsonData);
-    } catch (error) {
-        console.error(error);
+    if (req.query == {}) {
+        res.redirect(302, '/login');
+    } else if (req.query.ticket.toString.contains("ST")) {
+        try {
+            const data = await verifyTicket(req.query.ticket);
+            const jsonData = convert.xml2json(data, {
+                compact: true,
+                trim: true
+            });
+            res.type('application/json');
+            res.send(jsonData);
+        } catch (error) {
+            console.error(error);
+        }
     }
 })
 
