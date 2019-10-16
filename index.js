@@ -49,12 +49,12 @@ app.get('/', async (req, res) => {
                 compact: true,
                 trim: true
             });
-            jsonData.stringify();
+            casCookie = JSON.stringify(jsonData);
             //res.type('application/json');
             //res.send(jsonData);
             res.cookie(
                 'cas_user',
-                jsonData, {
+                casCookie, {
                     expires: new Date(Date.now() + 2 * 604800000),
                     path: '/'
                 }
