@@ -32,9 +32,9 @@ async function verifyTicket(ticket) {
 
 app.get('/', async (req, res) => {
     console.log(req.query);
-    if (req.query == {}) {
+    if (req.query === undefined) {
         res.redirect(302, '/login');
-    } else if (req.query.ticket.toString.contains("ST")) {
+    } else {
         try {
             const data = await verifyTicket(req.query.ticket);
             const jsonData = convert.xml2json(data, {
