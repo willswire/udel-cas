@@ -10,7 +10,7 @@ const app = express();
 var casLogin = '/cas/login?';
 var casVerify = '/cas/serviceValidate?';
 var casServer = 'https://cas.nss.udel.edu';
-var serviceURL = 'https://planner.cis.udel.edu';
+var serviceURL = 'https://planner.cis.udel.edu:3000';
 
 const PORT = 3000;
 
@@ -60,7 +60,7 @@ app.get('/', async (req, res) => {
                     path: '/'
                 }
             );
-            //res.redirect(302, serviceURL);
+            res.redirect(302, 'https://planner.cis.udel.edu');
         } catch (error) {
             console.error(error);
         }
