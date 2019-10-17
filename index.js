@@ -52,7 +52,7 @@ app.get('/', async (req, res) => {
                 compact: true,
                 trim: true
             });
-            var casCookie = jwt.sign(jsonData, 'planner');
+            var casCookie = jwt.sign(jsonData["cas:serviceResponse"]["cas:authenticationSuccess"], 'planner');
             res.cookie(
                 'cas_user',
                 casCookie, {
