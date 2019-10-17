@@ -48,13 +48,11 @@ app.get('/', async (req, res) => {
         try {
             var data = await verifyTicket(req.query.ticket);
             var jsonData = convert.xml2json(data, {
+                ignoreAttributes: true,
                 compact: true,
                 trim: true
             });
             var casCookie = jwt.sign(jsonData, 'planner');
-            //var casCookie = JSON.stringify(jsonData);
-            //res.type('application/json');
-            //res.send(jsonData);
             res.cookie(
                 'cas_user',
                 casCookie, {
