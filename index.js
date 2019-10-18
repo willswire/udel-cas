@@ -2,9 +2,10 @@ const express = require('express');
 const https = require('https');
 const fs = require('fs');
 const app = express();
-
 var bodyParser = require('body-parser');
 var mongo = require('mongoose');
+var Plan = require('./model/Plan.js');
+var User =require('./model/User.js');
 const port = 3002;
 
 /*
@@ -34,23 +35,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-var Schema = mongo.Schema;
-
-var plansSchema = new Schema({
-    objectId: mongo.Schema.Types.ObjectId,
-    planID:  String,
-    semester_1: Array,
-    semester_2: Array,
-    semester_3: Array, 
-    semester_4: Array,
-    semester_5: Array,
-    semester_6: Array,
-    semester_7: Array, 
-    semester_8: Array
-  });
-
-var Plan = mongo.model('plans', plansSchema, 'plans');
-
 app.post('/api/update-plan/:planID', function(req, res){
     Plan.save({"planID":req.params.planID}, function(err, data){
         if(err){
@@ -79,6 +63,27 @@ app.delete('/api/delete-plan/:planID', function(req, res){
         }
 
         res.send({data: "The plan was deleted"});
+    });
+});
+
+app.get('/api/users', function(req, res){
+    User.find({}, function(err, data){
+        if(err){
+            res.send(err);
+        }
+
+        console.log(data);
+        res.send(data);
+    });
+});
+
+app.get('/api/delete-user/:studentID', function(req, res){
+    User.deleteOne({"sid":req.params.studentID}, function(err, data){
+        if(err){
+            res.send(err);
+        }
+
+        res.send({data: "The user was deleted"});
     });
 });
 
