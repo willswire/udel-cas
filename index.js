@@ -112,6 +112,24 @@ app.get('/api/plan-names', function(req, res){
     });
 });
 
+app.get('/api/concentration-names', function(req, res){
+    Plan.find({planID: {$ne: "Traditional"}} , function(err, data){
+        if(err){
+            res.status(400).send(err);
+        }
+
+        else{
+            planNames = [];
+
+            for(plan in data){
+                planNames.push(data[plan]["planID"]);
+            }
+
+            res.status(200).send(planNames);
+        }
+    });
+});
+
 app.delete('/api/delete-plan/:planID', function(req, res){
     Plan.deleteOne({"planID":req.params.planID}, function(err, data){
         if(err){
