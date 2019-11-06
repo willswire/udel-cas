@@ -135,6 +135,55 @@ app.get('/api/users', function(req, res){
     });
 });
 
+app.get('/api/users/:studentID', function(req, res){
+    console.log("GET THIS STUDENT");
+    User.find({"sid":req.params.studentID}, function(err, data){
+        if(err){ 
+            res.status(400).send(err);
+        }
+        else{       
+            res.status(200).send(data);
+        }
+    });
+});
+
+
+app.post('/api/users',function(req,res) {
+    console.log("POST THIS STUDENT");
+
+
+    var myData = new User(req.body);
+    myData.save()
+        .then(item => {
+        res.send("item saved to database");
+    })
+        .catch(err => {
+        res.status(400).send("unable to save to database");
+    });
+
+
+    // User.save({"first_name":"jake"}, function(err, data){
+    //             if(err){
+    //                 res.status(400).send(err);
+    //             }
+    //             else{
+    //                 res.status(200).send({data: "The plan was deleted"});
+    //             }
+    // });
+});
+
+
+//   app.post('/api/update-plan/:planID', function(req, res){
+//     Plan.save({"planID":req.params.planID}, function(err, data){
+//         if(err){
+//             res.status(400).send(err);
+//         }
+//         else{
+//             res.status(200).send({data: "The plan was deleted"});
+//         }
+//     });
+// });
+
 app.get('/api/delete-user/:studentID', function(req, res){
     User.deleteOne({"sid":req.params.studentID}, function(err, data){
         if(err){
