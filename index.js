@@ -153,9 +153,10 @@ app.get('/api/users', function(req, res){
     });
 });
 
-app.get('/api/users/:studentID', function(req, res){
+app.get('/api/users/:uid', function(req, res){
     console.log("GET THIS STUDENT");
-    User.find({"sid":req.params.studentID}, function(err, data){
+    
+    User.find({"uid":req.params.uid}, function(err, data){
         if(err){ 
             res.status(400).send(err);
         }
@@ -167,9 +168,7 @@ app.get('/api/users/:studentID', function(req, res){
 
 
 app.post('/api/users',function(req,res) {
-    console.log("POST THIS STUDENT");
-
-
+    console.log("POST");
     var myData = new User(req.body);
     myData.save()
         .then(item => {
@@ -179,31 +178,23 @@ app.post('/api/users',function(req,res) {
         res.status(400).send("unable to save to database");
     });
 
+});
 
-    // User.save({"first_name":"jake"}, function(err, data){
-    //             if(err){
-    //                 res.status(400).send(err);
-    //             }
-    //             else{
-    //                 res.status(200).send({data: "The plan was deleted"});
-    //             }
-    // });
+app.put('/api/users/:uid',async(req,res) =>{
+    User.updateOne({"uid":req.params.uid},req.body,function(err,data){
+        if(err){
+            res.status(400).send(err);
+        }
+
+        else{
+            res.status(200).send({data: "The user was Updated"});
+        }
+    })
 });
 
 
-//   app.post('/api/update-plan/:planID', function(req, res){
-//     Plan.save({"planID":req.params.planID}, function(err, data){
-//         if(err){
-//             res.status(400).send(err);
-//         }
-//         else{
-//             res.status(200).send({data: "The plan was deleted"});
-//         }
-//     });
-// });
-
-app.get('/api/delete-user/:studentID', function(req, res){
-    User.deleteOne({"sid":req.params.studentID}, function(err, data){
+app.get('/api/delete-user/:uid', function(req, res){
+    User.deleteOne({"uid":req.params.uid}, function(err, data){
         if(err){
             res.status(400).send(err);
         }
