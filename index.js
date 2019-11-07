@@ -54,21 +54,22 @@ app.get('/', async (req, res) => {
             });
             var casCookie = jwt.sign(jsonData, 'universityofdelaware**1776**cisc');
             var apiCookie = jwt.sign({ auth: 'true' }, 'universityofdelaware**1776**cisc');
-            res.cookie(
+            res
+                .cookie(
                 'cas_user',
                 casCookie, {
                     expires: new Date(Date.now() + 259200000),
                     path: '/'
                 }
-            );
-            res.cookie(
+            )
+                .cookie(
                 'api_user',
                 apiCookie, {
                     expires: new Date(Date.now() + 259200000),
                     path: '/'
                 }
-            );
-            res.redirect(302, 'https://planner.cis.udel.edu');
+            )
+                .redirect(302, 'https://planner.cis.udel.edu');
         } catch (error) {
             console.error(error);
         }
