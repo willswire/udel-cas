@@ -53,10 +53,18 @@ app.get('/', async (req, res) => {
                 trim: true
             });
             var casCookie = jwt.sign(jsonData, 'planner');
+            var apiCookie = jwt.sign({ auth: 'true' }, 'universityofdelaware**1776**cisc');
             res.cookie(
                 'cas_user',
                 casCookie, {
-                    expires: new Date(Date.now() + 2 * 604800000),
+                    expires: new Date(Date.now() + 2 * 259200000),
+                    path: '/'
+                }
+            );
+            res.cookie(
+                'api_user',
+                apiCookie, {
+                    expires: new Date(Date.now() + 2 * 259200000),
                     path: '/'
                 }
             );
