@@ -168,7 +168,6 @@ app.get('/api/users/:uid', function(req, res){
 
 
 app.post('/api/users',function(req,res) {
-    console.log("POST");
     var myData = new User(req.body);
     myData.save()
         .then(item => {
