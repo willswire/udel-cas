@@ -11,9 +11,9 @@ const app = express();
 var casLogin = '/cas/login?';
 var casVerify = '/cas/serviceValidate?';
 var casServer = 'https://cas.nss.udel.edu';
-var serviceURL = 'https://planner.cis.udel.edu:3000';
+var serviceURL = 'https://planner.cis.udel.edu:3100';
 
-const PORT = 3000;
+const PORT = 3100;
 
 app.use(cookieSession({
     name: 'cas-session',
